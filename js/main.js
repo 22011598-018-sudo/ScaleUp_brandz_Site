@@ -22,7 +22,7 @@ $('.burger')?.addEventListener('click',()=>$('.links').classList.toggle('open'))
 // scroll effects
 let ly=0,tk=false;const tabs=$$('.tabbar a'),secs=tabs.map(a=>$(a.getAttribute('href')));
 const onScroll=()=>{const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;prog.style.transform=`scaleX(${h>0?y/h:0})`;
- const t=$('.top');if(t){t.classList.toggle('sc',y>20);t.classList.toggle('hide',y>ly&&y>300);}ly=y;
+ const t=$('.top');if(t){t.classList.toggle('sc',y>20);}ly=y;
  $$('[data-p]').forEach(el=>{const r=el.getBoundingClientRect();el.style.transform=`translateY(${(r.top-innerHeight/2)*el.dataset.p}px)`});
  $$('.scrub').forEach(el=>{const r=el.getBoundingClientRect(),p=Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(r.height+innerHeight*.3)));const ws=$$('.w',el),n=Math.round(p*ws.length*1.15);ws.forEach((w,i)=>w.classList.toggle('on',i<n))});
  secs.forEach((s,i)=>{if(!s)return;const r=s.getBoundingClientRect();if(r.top<220&&r.bottom>220){tabs.forEach(a=>a.classList.remove('on'));tabs[i].classList.add('on')}});tk=false};
@@ -53,3 +53,12 @@ if(ap){const t2=$$('.tabs button',ap);t2.forEach(b=>b.onclick=()=>{t2.forEach(x=
  $$('.stu',ap).forEach(e=>{e.classList.toggle('hide',c);$('input',e).required=!c});$$('.col',ap).forEach(e=>{e.classList.toggle('hide',!c);$('input',e).required=c})});
  t2[0].click();ap.onsubmit=e=>{e.preventDefault();save('internship-'+ap.dataset.type,ap);t2[0].click()}}
 const ct=$('#contact-form');if(ct)ct.onsubmit=e=>{e.preventDefault();save('contact',ct)};
+
+// fit giant footer wordmark to exact screen width
+const fitGiant=()=>{$$('.giant[data-giant]').forEach(el=>{
+ el.style.fontSize='100px';el.style.width='max-content';
+ const tw=el.getBoundingClientRect().width;el.style.width='';
+ const avail=el.parentElement.clientWidth*0.96;
+ if(tw>0)el.style.fontSize=Math.floor(100*avail/tw*10)/10+'px'})};
+fitGiant();addEventListener('resize',fitGiant);addEventListener('load',fitGiant);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitGiant);
